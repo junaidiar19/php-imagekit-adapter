@@ -13,6 +13,8 @@ This package can be used for php or Laravel project. Let's install to your proje
 
 [🚀 Usage in Laravel](#usage-in-laravel)
 
+[👩‍💻 Usage with CKEditor & Laravel](#usage-with-ckeditor-laravel)
+
 ## Installation
 
 You can install the package via composer:
@@ -86,7 +88,7 @@ Then create a new disk in `config/filesystems.php`:
       'driver' => 'imagekit',
       'key' => env('IMAGEKIT_PUBLIC_KEY'),
       'secret' => env('IMAGEKIT_PRIVATE_KEY'),
-      'url_endpoint' => env('IMAGEKIT_URL_ENDPOINT'),
+      'endpoint_url' => env('IMAGEKIT_ENDPOINT_URL'),
       'throw' => false,
   ]
 ]
@@ -95,9 +97,9 @@ Then create a new disk in `config/filesystems.php`:
 Don't forget to add your keys in `.env`:
 
 ```php
-IMAGEKIT_PUBLIC_KEY = your-public-key
-IMAGEKIT_PRIVATE_KEY = your-private-key
-IMAGEKIT_URL_ENDPOINT = your-endpint-url
+IMAGEKIT_PUBLIC_KEY=your-public-key
+IMAGEKIT_PRIVATE_KEY=your-private-key
+IMAGEKIT_ENDPOINT_URL=your-endpint-url
 ```
 
 And now you can use Laravel's Storage facade:
@@ -107,4 +109,44 @@ $result = Storage::disk('imagekit')->put('index.txt', 'This is an index file.');
 return response($result);
 ```
 
-Happy Coding:) Thank You.
+## Usage with CKEditor & Laravel
+
+Install ckeditor 5 from the official documentation here https://ckeditor.com/docs/index.html and make sure you have installed [Upload Adapter](https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/simple-upload-adapter.html#installation)
+
+then setup your client side like so:
+
+```html
+<script>
+  ClassicEditor.create(document.querySelector("#editor"), {
+    simpleUpload: {
+      // The URL that the images are uploaded to.
+      uploadUrl: "{{ route('ckeditor.upload') . '?_token=' . csrf_token() }}",
+    },
+  }).catch(error => {
+    console.error(error);
+  });
+</script>
+```
+
+then you can create the method controller like so:
+
+```php
+public function upload(Request $request)
+{
+    if ($request->hasFile('upload')) {
+        $request->validate([
+            'upload' => 'image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $file = $request->file('upload');
+
+        $result = Storage::disk('imagekit')->put('ckeditor', $file);
+        $url = env('IMAGEKIT_ENDPOINT_URL') . $result;
+        return response()->json(['fileName' => $result, 'uploaded' => 1, 'url' => $url]);
+    }
+}
+```
+
+Ultimately you would see the magic if you click the insert image on the ckeditor toolbar.
+
+Happy Coding Thank You :)
