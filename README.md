@@ -113,9 +113,14 @@ return response($result);
 
 Install ckeditor 5 from the official documentation here https://ckeditor.com/docs/index.html and make sure you have installed [Upload Adapter](https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/simple-upload-adapter.html#installation)
 
+or
+
+you can download my starter pack using ckeditor 5 [Download Here](/assets/ckeditor5.zip)
+
 then setup your client side like so:
 
 ```html
+<script src="{{ asset('plugins/ckeditor5/build/ckeditor.js') }}"></script>
 <script>
   ClassicEditor.create(document.querySelector("#editor"), {
     simpleUpload: {
