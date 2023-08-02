@@ -1,0 +1,33 @@
+{
+  "name": "junaidiar/imagekit-adapter",
+  "description": "File System adapter for ImageKit.",
+  "autoload": {
+    "psr-4": {
+      "JunaidiAR\\ImageKitAdapter\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "JunaidiAR\\ImageKitAdapter\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "./vendor/bin/phpunit"
+  },
+  "authors": [
+    {
+      "name": "Junaidi Abdul Rahman",
+      "email": "junaidiar.fcb@gmail.com",
+      "homepage": "https://junaidi-abdul-rahman.netlify.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "league/flysystem": "^3.15",
+    "imagekit/imagekit": "^3.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10.2"
+  }
+}
